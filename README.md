@@ -30,8 +30,15 @@ The demo is a single HTML file with no build step and no server.
 **Option B — run locally:** download `index.html` and double-click it.
 (Voice input needs Chrome/Edge; everything else works in any browser.)
 
-### Two modes
+### Three ways to play
 
+- **🎮 Companion play (works with no key, no mic):** Atlas behaves like a
+  living friend on its table. Tap the game buttons — or just tell it — to make
+  it **walk**, **run**, **dance** (with music and a rainbow globe), **sing**,
+  tell **jokes**, or put on a **light show**. Click/tap its head to pat it (it
+  giggles with heart eyes). It blinks and sways on its own when idle. All
+  commands work by voice too, in both languages: "Atlas, dance!" /
+  «អាត់ឡាស រាំ!».
 - **💬 Talk** — push-to-talk conversation: tap the mic, speak, Atlas answers
   and speaks back.
 - **👁 Observe (Atlas Sense)** — Atlas becomes environment-aware: it listens

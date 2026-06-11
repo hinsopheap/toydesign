@@ -15,19 +15,51 @@
   h1 { text-align: center; font-size: 2.2rem; letter-spacing: 0.04em; }
   .sub { text-align: center; color: #9fb0d0; font-size: 0.9rem; margin-top: 6px; }
   .grid { display: grid; grid-template-columns: 1fr; gap: 28px; margin-top: 28px; }
-  @media (min-width: 860px) { .grid { grid-template-columns: 360px 1fr; } }
+  @media (min-width: 860px) { .grid { grid-template-columns: 400px 1fr; } }
   .figure { display: flex; flex-direction: column; align-items: center; }
-  .statelabel { margin-top: 8px; font-size: 0.85rem; color: #cbd5e1; min-height: 1.2em; text-align: center; }
-  .langs { margin-top: 12px; display: flex; gap: 8px; }
+
+  /* ---- stage: the table Atlas lives on ---- */
+  #stage { position: relative; width: 100%; height: 330px; overflow: hidden; }
+  #stage::after { /* table edge */
+    content: ''; position: absolute; left: 0; right: 0; bottom: 6px; height: 14px;
+    background: linear-gradient(#8a6948, #5e4630); border-top: 3px solid #b08a5e; border-radius: 2px;
+  }
+  #mover { position: absolute; bottom: 16px; left: 50%; transition: none; will-change: transform; }
+  #flip { transition: transform 0.25s; }
+  #flip.faceLeft { transform: scaleX(-1); }
+  #bob svg { display: block; }
+  .walking #bob { animation: hop 0.55s infinite; }
+  .running #bob { animation: hop 0.28s infinite; }
+  .dancing #bob { animation: groove 0.5s infinite; }
+  .singing #bob { animation: sway 1.2s infinite ease-in-out; }
+  .patted #bob { animation: giggle 0.45s 2; }
+  @keyframes hop { 0%,100% { transform: translateY(0) scaleY(1);} 30% { transform: translateY(-12px) scaleY(1.03);} 65% { transform: translateY(0) scaleY(0.95);} }
+  @keyframes groove { 0%,100% { transform: translateY(0) rotate(-7deg);} 50% { transform: translateY(-14px) rotate(7deg);} }
+  @keyframes sway { 0%,100% { transform: rotate(-4deg);} 50% { transform: rotate(4deg);} }
+  @keyframes giggle { 0%,100% { transform: rotate(0);} 25% { transform: rotate(-5deg) translateY(-4px);} 75% { transform: rotate(5deg) translateY(-4px);} }
+  .spark { position: absolute; font-size: 1.1rem; pointer-events: none; animation: rise 1.4s forwards; }
+  @keyframes rise { from { opacity: 1; transform: translateY(0);} to { opacity: 0; transform: translateY(-70px);} }
+
+  .statelabel { margin-top: 4px; font-size: 0.85rem; color: #cbd5e1; min-height: 1.2em; text-align: center; }
+  .langs { margin-top: 10px; display: flex; gap: 8px; }
   .langs button {
     padding: 6px 16px; border-radius: 999px; border: 1px solid #475569;
     background: transparent; color: #cbd5e1; cursor: pointer; font-size: 0.85rem;
   }
   .langs button.active { background: #0284c7; border-color: #0284c7; color: #fff; }
-  .modes { margin-top: 16px; display: flex; gap: 10px; }
+
+  /* ---- play buttons ---- */
+  .playRow { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .playRow button {
+    border: 1px solid #475569; background: #1e293b; color: #e2e8f0; border-radius: 10px;
+    padding: 8px 12px; font-size: 0.85rem; cursor: pointer; transition: border-color 0.15s;
+  }
+  .playRow button:hover { border-color: #38bdf8; }
+
+  .modes { margin-top: 14px; display: flex; gap: 10px; }
   #micBtn, #observeBtn {
-    width: 64px; height: 64px; border-radius: 50%;
-    border: none; color: #fff; cursor: pointer; font-size: 1.4rem; transition: background 0.2s;
+    width: 60px; height: 60px; border-radius: 50%;
+    border: none; color: #fff; cursor: pointer; font-size: 1.3rem; transition: background 0.2s;
   }
   #micBtn { background: #0284c7; }
   #observeBtn { background: #7c3aed; }
@@ -36,10 +68,10 @@
   #micBtn:disabled, #observeBtn:disabled { background: #334155; cursor: not-allowed; animation: none; }
   @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.5);} 50% { box-shadow: 0 0 0 14px rgba(220,38,38,0);} }
   .modelabels { display: flex; gap: 10px; margin-top: 6px; }
-  .modelabels span { width: 64px; text-align: center; font-size: 0.68rem; color: #94a3b8; }
-  .micnote { margin-top: 10px; font-size: 0.72rem; color: #64748b; text-align: center; max-width: 300px; }
-  #camWrap { margin-top: 14px; display: none; flex-direction: column; align-items: center; gap: 8px; }
-  #cam { width: 240px; border-radius: 10px; border: 2px solid #7c3aed; }
+  .modelabels span { width: 60px; text-align: center; font-size: 0.68rem; color: #94a3b8; }
+  .micnote { margin-top: 8px; font-size: 0.72rem; color: #64748b; text-align: center; max-width: 320px; }
+  #camWrap { margin-top: 12px; display: none; flex-direction: column; align-items: center; gap: 8px; }
+  #cam { width: 220px; border-radius: 10px; border: 2px solid #7c3aed; }
   .camBtns { display: flex; gap: 8px; }
   .camBtns button, #adviseBtn {
     border: 1px solid #475569; background: #1e293b; color: #e2e8f0; border-radius: 8px;
@@ -47,6 +79,7 @@
   }
   #adviseBtn { background: #b45309; border-color: #b45309; font-weight: 600; }
   #adviseBtn:hover { background: #d97706; }
+
   .panel {
     border: 1px solid #334155; border-radius: 14px; background: rgba(15,23,42,0.6);
     display: flex; flex-direction: column; min-height: 520px;
@@ -91,57 +124,78 @@
 <body>
 <div class="wrap">
   <h1>ATLAS</h1>
-  <p class="sub">Smart tabletop toy — live brain demo · English + ខ្មែរ · DG Academy</p>
+  <p class="sub">Smart tabletop companion — live demo · English + ខ្មែរ · DG Academy</p>
 
   <div class="grid">
     <div class="figure">
-      <svg id="atlasSvg" viewBox="0 0 360 460" width="280" aria-label="Atlas">
-        <defs>
-          <radialGradient id="g1" cx="40%" cy="35%" r="75%">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-            <stop offset="45%" stop-color="#3aa0ff" id="globeStopA"/>
-            <stop offset="100%" stop-color="#3aa0ff" stop-opacity="0.7" id="globeStopB"/>
-          </radialGradient>
-          <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#f2efe9"/><stop offset="100%" stop-color="#d8d3c8"/>
-          </linearGradient>
-        </defs>
-        <circle id="halo" cx="180" cy="105" r="92" fill="rgba(58,160,255,0.3)"/>
-        <path d="M 108 268 C 88 230 92 202 116 182" fill="none" stroke="#d8d3c8" stroke-width="24" stroke-linecap="round"/>
-        <path d="M 252 268 C 272 230 268 202 244 182" fill="none" stroke="#e8e4dc" stroke-width="24" stroke-linecap="round"/>
-        <circle cx="180" cy="105" r="62" fill="url(#g1)"/>
-        <ellipse cx="180" cy="105" rx="62" ry="24" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="1.5"/>
-        <ellipse cx="180" cy="105" rx="24" ry="62" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="1.5"/>
-        <ellipse cx="160" cy="82" rx="16" ry="9" fill="#fff" opacity="0.55"/>
-        <ellipse cx="180" cy="172" rx="36" ry="10" fill="#1d2330"/>
-        <g id="collar" fill="#3aa0ff">
-          <circle cx="148" cy="172" r="3"/><circle cx="162" cy="175" r="3"/><circle cx="180" cy="176" r="3"/>
-          <circle cx="198" cy="175" r="3"/><circle cx="212" cy="172" r="3"/>
-        </g>
-        <path d="M 100 440 L 100 270 C 100 208 132 180 180 180 C 228 180 260 208 260 270 L 260 440 Z" fill="url(#g2)"/>
-        <rect x="122" y="212" width="116" height="68" rx="34" fill="#2b313d"/>
-        <g id="eyesOpen" style="display:none" fill="#5fe3ff">
-          <circle cx="155" cy="244" r="11"/><circle cx="205" cy="244" r="11"/>
-          <circle cx="151" cy="240" r="4" fill="#fff"/><circle cx="201" cy="240" r="4" fill="#fff"/>
-        </g>
-        <g id="eyesClosed" stroke="#5fe3ff" stroke-width="4" stroke-linecap="round" fill="none">
-          <path d="M 144 246 q 10 8 22 0"/><path d="M 194 246 q 10 8 22 0"/>
-        </g>
-        <ellipse cx="132" cy="262" rx="7" ry="4" fill="#ff9d8a" opacity="0.5"/>
-        <ellipse cx="228" cy="262" rx="7" ry="4" fill="#ff9d8a" opacity="0.5"/>
-        <g fill="#9a948a"><circle cx="160" cy="298" r="2.5"/><circle cx="173" cy="298" r="2.5"/><circle cx="187" cy="298" r="2.5"/><circle cx="200" cy="298" r="2.5"/></g>
-        <g fill="#b5afa3">
-          <circle cx="157" cy="330" r="3"/><circle cx="173" cy="330" r="3"/><circle cx="189" cy="330" r="3"/><circle cx="205" cy="330" r="3"/>
-          <circle cx="165" cy="344" r="3"/><circle cx="181" cy="344" r="3"/><circle cx="197" cy="344" r="3"/>
-          <circle cx="157" cy="358" r="3"/><circle cx="173" cy="358" r="3"/><circle cx="189" cy="358" r="3"/><circle cx="205" cy="358" r="3"/>
-        </g>
-        <path d="M 92 440 L 268 440 L 260 414 C 230 404 130 404 100 414 Z" fill="#3a4150"/>
-        <rect x="90" y="434" width="180" height="8" rx="4" fill="#1d222d"/>
-      </svg>
-      <p class="statelabel" id="stateLabel">Sleeping — tap the mic or type to wake me</p>
+      <div id="stage">
+        <div id="mover"><div id="flip"><div id="bob">
+        <svg id="atlasSvg" viewBox="0 0 360 460" width="220" aria-label="Atlas" style="cursor:pointer" title="Pat my head!">
+          <defs>
+            <radialGradient id="g1" cx="40%" cy="35%" r="75%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+              <stop offset="45%" stop-color="#3aa0ff" id="globeStopA"/>
+              <stop offset="100%" stop-color="#3aa0ff" stop-opacity="0.7" id="globeStopB"/>
+            </radialGradient>
+            <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#f2efe9"/><stop offset="100%" stop-color="#d8d3c8"/>
+            </linearGradient>
+          </defs>
+          <circle id="halo" cx="180" cy="105" r="92" fill="rgba(58,160,255,0.3)"/>
+          <path d="M 108 268 C 88 230 92 202 116 182" fill="none" stroke="#d8d3c8" stroke-width="24" stroke-linecap="round"/>
+          <path d="M 252 268 C 272 230 268 202 244 182" fill="none" stroke="#e8e4dc" stroke-width="24" stroke-linecap="round"/>
+          <circle cx="180" cy="105" r="62" fill="url(#g1)"/>
+          <ellipse cx="180" cy="105" rx="62" ry="24" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="1.5"/>
+          <ellipse cx="180" cy="105" rx="24" ry="62" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="1.5"/>
+          <ellipse cx="160" cy="82" rx="16" ry="9" fill="#fff" opacity="0.55"/>
+          <ellipse cx="180" cy="172" rx="36" ry="10" fill="#1d2330"/>
+          <g id="collar" fill="#3aa0ff">
+            <circle cx="148" cy="172" r="3"/><circle cx="162" cy="175" r="3"/><circle cx="180" cy="176" r="3"/>
+            <circle cx="198" cy="175" r="3"/><circle cx="212" cy="172" r="3"/>
+          </g>
+          <path d="M 100 440 L 100 270 C 100 208 132 180 180 180 C 228 180 260 208 260 270 L 260 440 Z" fill="url(#g2)"/>
+          <rect x="122" y="212" width="116" height="68" rx="34" fill="#2b313d"/>
+          <g id="eyesOpen" style="display:none" fill="#5fe3ff">
+            <circle cx="155" cy="244" r="11"/><circle cx="205" cy="244" r="11"/>
+            <circle cx="151" cy="240" r="4" fill="#fff"/><circle cx="201" cy="240" r="4" fill="#fff"/>
+          </g>
+          <g id="eyesClosed" stroke="#5fe3ff" stroke-width="4" stroke-linecap="round" fill="none">
+            <path d="M 144 246 q 10 8 22 0"/><path d="M 194 246 q 10 8 22 0"/>
+          </g>
+          <g id="eyesStar" style="display:none" fill="#ffd84d">
+            <path d="M155 231 L158 240 L167 240 L160 246 L162 255 L155 249 L148 255 L150 246 L143 240 L152 240 Z"/>
+            <path d="M205 231 L208 240 L217 240 L210 246 L212 255 L205 249 L198 255 L200 246 L193 240 L202 240 Z"/>
+          </g>
+          <g id="eyesHeart" style="display:none" fill="#ff6b8a">
+            <path d="M155 252 C 147 245 144 238 150 235 C 153 233 155 236 155 238 C 155 236 157 233 160 235 C 166 238 163 245 155 252 Z"/>
+            <path d="M205 252 C 197 245 194 238 200 235 C 203 233 205 236 205 238 C 205 236 207 233 210 235 C 216 238 213 245 205 252 Z"/>
+          </g>
+          <ellipse cx="132" cy="262" rx="7" ry="4" fill="#ff9d8a" opacity="0.5"/>
+          <ellipse cx="228" cy="262" rx="7" ry="4" fill="#ff9d8a" opacity="0.5"/>
+          <g fill="#9a948a"><circle cx="160" cy="298" r="2.5"/><circle cx="173" cy="298" r="2.5"/><circle cx="187" cy="298" r="2.5"/><circle cx="200" cy="298" r="2.5"/></g>
+          <g fill="#b5afa3">
+            <circle cx="157" cy="330" r="3"/><circle cx="173" cy="330" r="3"/><circle cx="189" cy="330" r="3"/><circle cx="205" cy="330" r="3"/>
+            <circle cx="165" cy="344" r="3"/><circle cx="181" cy="344" r="3"/><circle cx="197" cy="344" r="3"/>
+            <circle cx="157" cy="358" r="3"/><circle cx="173" cy="358" r="3"/><circle cx="189" cy="358" r="3"/><circle cx="205" cy="358" r="3"/>
+          </g>
+          <path d="M 92 440 L 268 440 L 260 414 C 230 404 130 404 100 414 Z" fill="#3a4150"/>
+          <rect x="90" y="434" width="180" height="8" rx="4" fill="#1d222d"/>
+        </svg>
+        </div></div></div>
+      </div>
+      <p class="statelabel" id="stateLabel">Sleeping — tap the mic, type, or pick a game</p>
       <div class="langs">
         <button id="langEn" class="active">English</button>
         <button id="langKm">ខ្មែរ (Khmer)</button>
+      </div>
+      <div class="playRow">
+        <button data-act="walk">🚶 Walk</button>
+        <button data-act="run">🏃 Run</button>
+        <button data-act="dance">💃 Dance</button>
+        <button data-act="sing">🎵 Sing</button>
+        <button data-act="joke">😂 Joke</button>
+        <button data-act="lights">✨ Lights</button>
+        <button data-act="stop">⏹ Stop</button>
       </div>
       <div class="modes">
         <button id="micBtn" title="Push to talk">🎤</button>
@@ -160,12 +214,16 @@
 
     <div class="panel">
       <header>🔊 Conversation &amp; observations <span id="obsBadge">● OBSERVING — mic and camera active</span></header>
-      <div id="log"><p class="hint">Talk mode: tap 🎤 and speak. Observe mode: tap 👁 — Atlas listens to everyone, watches through the camera, answers when you say its name (“Atlas …”), and gives advice when you tap 💡.</p></div>
+      <div id="log"><p class="hint">Atlas is a companion: tap a game button, pat its head, or talk to it.
+        Voice works too — say “Atlas, dance!” or «អាត់ឡាស រាំ!». In 👁 Observe mode it listens to everyone,
+        watches the room, and advises you when you tap 💡.</p></div>
       <p class="note" id="ttsNote" style="display:none"></p>
       <div class="chips">
         <button data-lang="en" data-text="Hello Atlas!">“Hello Atlas!”</button>
+        <button data-lang="en" data-text="Atlas, tell me a joke">“Tell me a joke”</button>
         <button data-lang="en" data-text="What is 7 plus 5?">“What is 7 plus 5?”</button>
         <button data-lang="km" data-text="សួស្តី Atlas!">“សួស្តី Atlas!”</button>
+        <button data-lang="km" data-text="អាត់ឡាស រាំ!">“អាត់ឡាស រាំ!”</button>
         <button data-lang="km" data-text="៥ បូក ៣ ស្មើប៉ុន្មាន?">“៥ បូក ៣ ស្មើប៉ុន្មាន?”</button>
       </div>
       <form id="form">
@@ -177,9 +235,9 @@
 
   <details>
     <summary>⚙️ Cloud AI brain (OpenRouter API key) — required for vision and smart advice</summary>
-    <p style="margin-top:8px">Without a key, Atlas uses its built-in offline brain (greetings + math, both languages) and can only
-    log what it hears. With a key (free at openrouter.ai), Atlas understands open conversation, describes what the camera sees,
-    and gives real advice. The key is stored only in this browser; images and transcripts are sent only to OpenRouter.</p>
+    <p style="margin-top:8px">Without a key, Atlas plays, moves, jokes, sings, does math and greetings in both languages,
+    and logs what it hears. With a key (free at openrouter.ai), Atlas also understands open conversation, describes what
+    the camera sees, and gives real advice. The key is stored only in this browser; images and transcripts go only to OpenRouter.</p>
     <input id="apiKey" type="password" placeholder="sk-or-...">
   </details>
 
@@ -189,31 +247,40 @@
 
 <script>
 const STATES = {
-  idle:      { color: '#3aa0ff', glow: 'rgba(58,160,255,0.30)', label: 'Sleeping — tap the mic or type to wake me', eyes: false },
-  listening: { color: '#43e6ff', glow: 'rgba(67,230,255,0.50)', label: 'Listening…', eyes: true },
-  thinking:  { color: '#ffb648', glow: 'rgba(255,182,72,0.45)', label: 'Thinking…', eyes: true },
-  speaking:  { color: '#4ade80', glow: 'rgba(74,222,128,0.45)', label: 'Speaking', eyes: true },
-  observing: { color: '#c084fc', glow: 'rgba(192,132,252,0.45)', label: 'Observing — say “Atlas …” to ask me anything', eyes: true },
+  idle:      { color: '#3aa0ff', glow: 'rgba(58,160,255,0.30)', label: 'Sleeping — tap the mic, type, or pick a game', eyes: 'closed' },
+  listening: { color: '#43e6ff', glow: 'rgba(67,230,255,0.50)', label: 'Listening…', eyes: 'open' },
+  thinking:  { color: '#ffb648', glow: 'rgba(255,182,72,0.45)', label: 'Thinking…', eyes: 'open' },
+  speaking:  { color: '#4ade80', glow: 'rgba(74,222,128,0.45)', label: 'Speaking', eyes: 'open' },
+  observing: { color: '#c084fc', glow: 'rgba(192,132,252,0.45)', label: 'Observing — say “Atlas …” to ask me anything', eyes: 'open' },
+  playing:   { color: '#f472b6', glow: 'rgba(244,114,182,0.45)', label: 'Playing!', eyes: 'open' },
 };
 let state = 'idle';
 let language = 'en';
 let observing = false;
-let busy = false;            // a question or advice is being processed
-const ambient = [];          // rolling environment memory: {time, kind:'heard'|'saw', text}
+let busy = false;
+const ambient = [];
 const AMBIENT_MAX = 40;
 
 const $ = (id) => document.getElementById(id);
 const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
+function setEyes(kind) {
+  ['eyesOpen', 'eyesClosed', 'eyesStar', 'eyesHeart'].forEach((id) => { $(id).style.display = 'none'; });
+  $({ open: 'eyesOpen', closed: 'eyesClosed', star: 'eyesStar', heart: 'eyesHeart' }[kind]).style.display = '';
+}
+
+function setGlobe(color, glow) {
+  $('globeStopA').setAttribute('stop-color', color);
+  $('globeStopB').setAttribute('stop-color', color);
+  $('halo').setAttribute('fill', glow || color);
+  $('collar').setAttribute('fill', color);
+}
+
 function setState(next) {
   state = next;
   const s = STATES[next];
-  $('globeStopA').setAttribute('stop-color', s.color);
-  $('globeStopB').setAttribute('stop-color', s.color);
-  $('halo').setAttribute('fill', s.glow);
-  $('collar').setAttribute('fill', s.color);
-  $('eyesOpen').style.display = s.eyes ? '' : 'none';
-  $('eyesClosed').style.display = s.eyes ? 'none' : '';
+  setGlobe(s.color, s.glow);
+  setEyes(s.eyes);
   $('stateLabel').textContent = s.label;
   $('micBtn').classList.toggle('listening', next === 'listening');
   $('micBtn').disabled = observing || next === 'thinking' || next === 'speaking';
@@ -241,6 +308,203 @@ function remember(kind, text) {
   addMsg('ambient', (kind === 'heard' ? '🎤 heard: ' : '👁 saw: ') + text);
 }
 
+/* ---------- little sound effects & music (Web Audio) ---------- */
+let audioCtx = null;
+function ctx() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+function tone(freq, start, dur, type, vol) {
+  const c = ctx();
+  const o = c.createOscillator(); const g = c.createGain();
+  o.type = type || 'sine'; o.frequency.value = freq;
+  g.gain.setValueAtTime(0.0001, c.currentTime + start);
+  g.gain.linearRampToValueAtTime(vol || 0.12, c.currentTime + start + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + start + dur);
+  o.connect(g).connect(c.destination);
+  o.start(c.currentTime + start); o.stop(c.currentTime + start + dur + 0.05);
+}
+function chirp() { tone(880, 0, 0.08, 'square', 0.06); tone(1320, 0.09, 0.1, 'square', 0.06); }
+function giggleSound() { tone(660, 0, 0.07, 'sine', 0.1); tone(880, 0.08, 0.07, 'sine', 0.1); tone(1100, 0.16, 0.12, 'sine', 0.1); }
+const NOTE = { C: 523, D: 587, E: 659, F: 698, G: 784, A: 880 };
+function playMelody() { // Twinkle twinkle, first phrase
+  const seq = ['C','C','G','G','A','A','G', null, 'F','F','E','E','D','D','C'];
+  seq.forEach((n, i) => { if (n) tone(NOTE[n], i * 0.32, 0.28, 'triangle', 0.1); });
+  return seq.length * 0.32;
+}
+function danceBeat(times) {
+  for (let i = 0; i < times; i++) { tone(196, i * 0.5, 0.1, 'sine', 0.12); tone(NOTE.E, i * 0.5 + 0.25, 0.08, 'square', 0.05); }
+}
+
+/* ---------- sparkle emojis over the stage ---------- */
+function sparkle(emojis, count) {
+  for (let i = 0; i < (count || 5); i++) {
+    const s = document.createElement('span');
+    s.className = 'spark';
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.left = (15 + Math.random() * 70) + '%';
+    s.style.bottom = (40 + Math.random() * 40) + '%';
+    s.style.animationDelay = (Math.random() * 0.6) + 's';
+    $('stage').appendChild(s);
+    setTimeout(() => s.remove(), 2200);
+  }
+}
+
+/* ---------- movement & actions ---------- */
+let x = 0, dir = 1, moveTimer = null, actionTimer = null, rainbowTimer = null;
+let currentAction = null;
+
+function applyX() {
+  $('mover').style.transform = 'translateX(calc(-50% + ' + x + 'px))';
+  $('flip').classList.toggle('faceLeft', dir < 0);
+}
+
+function bounds() { return Math.max(40, $('stage').clientWidth / 2 - 120); }
+
+function startMoving(speed) {
+  stopMoving();
+  moveTimer = setInterval(() => {
+    x += speed * dir;
+    const b = bounds();
+    if (x > b) { x = b; dir = -1; }
+    if (x < -b) { x = -b; dir = 1; }
+    applyX();
+  }, 40);
+}
+function stopMoving() { if (moveTimer) { clearInterval(moveTimer); moveTimer = null; } }
+
+function clearAction(silent) {
+  stopMoving();
+  if (actionTimer) { clearTimeout(actionTimer); actionTimer = null; }
+  if (rainbowTimer) { clearInterval(rainbowTimer); rainbowTimer = null; }
+  ['walking', 'running', 'dancing', 'singing'].forEach((c) => $('stage').classList.remove(c));
+  currentAction = null;
+  if (!silent) setState(observing ? 'observing' : 'idle');
+}
+
+const JOKES = {
+  en: [
+    'Why did the math book look so sad? Because it had too many problems!',
+    'What do you call a fish with no eyes? A fsh!',
+    'Why can’t your nose be twelve inches long? Because then it would be a foot!',
+    'What did one wall say to the other wall? Meet you at the corner!',
+    'Why did the robot go on holiday? It needed to recharge its batteries!',
+  ],
+  km: [
+    'ហេតុអ្វីសៀវភៅគណិតវិទ្យាមើលទៅក្រៀមក្រំ? ព្រោះវាមានចំណោទច្រើនពេក!',
+    'អ្វីដែលមានធ្មេញច្រើន តែមិនដែលខាំ? ស្និតសិតសក់!',
+    'អ្វីដែលឡើងជានិច្ច តែមិនដែលចុះ? អាយុរបស់យើង!',
+    'ហេតុអ្វីរ៉ូបូតទៅសម្រាកវិស្សមកាល? ព្រោះវាត្រូវការសាកថ្មឡើងវិញ!',
+  ],
+};
+
+const ACTION_LINES = {
+  walk:  { en: 'Time for a little walk!', km: 'តោះដើរលេងបន្តិច!' },
+  run:   { en: 'Watch me run! Wheee!', km: 'មើលខ្ញុំរត់! វ៊ីវ!' },
+  dance: { en: 'Let’s dance together!', km: 'តោះរាំទាំងអស់គ្នា!' },
+  sing:  { en: 'Listen to my song!', km: 'ស្ដាប់ចម្រៀងរបស់ខ្ញុំណា!' },
+  lights:{ en: 'Look at my light show!', km: 'មើលពន្លឺដ៏ស្រស់ស្អាតរបស់ខ្ញុំ!' },
+  stop:  { en: 'Okay, I’ll rest now.', km: 'បាទ ខ្ញុំសម្រាកសិនណា។' },
+  sleep: { en: 'Good night! Zzz…', km: 'រាត្រីសួស្ដី!ហ្ស៊ះ...' },
+};
+
+function performAction(name) {
+  if (name === 'stop' || name === 'sleep') {
+    clearAction(true);
+    setState('idle');
+    const line = ACTION_LINES[name][language];
+    addMsg('atlas', line, 'play');
+    speak(line, language === 'km', afterSpeech);
+    return;
+  }
+
+  clearAction(true);
+  currentAction = name;
+  setState('playing');
+  chirp();
+  const line = name === 'joke'
+    ? JOKES[language][Math.floor(Math.random() * JOKES[language].length)]
+    : ACTION_LINES[name][language];
+  addMsg('atlas', line, 'play');
+
+  if (name === 'walk') {
+    $('stage').classList.add('walking');
+    startMoving(1.6);
+    actionTimer = setTimeout(() => clearAction(), 15000);
+    speak(line, language === 'km', () => { if (currentAction === 'walk') { setState('playing'); $('stateLabel').textContent = STATES.playing.label; } else afterSpeech(); });
+  } else if (name === 'run') {
+    $('stage').classList.add('running');
+    startMoving(4.2);
+    sparkle(['💨'], 3);
+    actionTimer = setTimeout(() => clearAction(), 10000);
+    speak(line, language === 'km', () => { if (currentAction !== 'run') afterSpeech(); });
+  } else if (name === 'dance') {
+    $('stage').classList.add('dancing');
+    setEyes('star');
+    sparkle(['🎶', '✨', '🎵'], 8);
+    danceBeat(16);
+    const colors = ['#f472b6', '#43e6ff', '#ffd84d', '#4ade80', '#c084fc'];
+    let i = 0;
+    rainbowTimer = setInterval(() => { setGlobe(colors[i++ % colors.length]); }, 350);
+    actionTimer = setTimeout(() => clearAction(), 8200);
+    speak(line, language === 'km', () => {});
+  } else if (name === 'sing') {
+    $('stage').classList.add('singing');
+    sparkle(['🎵', '🎶'], 6);
+    speak(line, language === 'km', () => {
+      const dur = playMelody();
+      actionTimer = setTimeout(() => clearAction(), dur * 1000 + 400);
+    });
+  } else if (name === 'lights') {
+    setEyes('star');
+    sparkle(['✨', '🌈', '💡'], 8);
+    const colors = ['#ff5a52', '#ffb648', '#ffd84d', '#4ade80', '#43e6ff', '#c084fc', '#f472b6'];
+    let i = 0;
+    rainbowTimer = setInterval(() => { setGlobe(colors[i++ % colors.length]); }, 280);
+    actionTimer = setTimeout(() => clearAction(), 7000);
+    speak(line, language === 'km', () => {});
+  } else if (name === 'joke') {
+    setEyes('star');
+    sparkle(['😂', '🤭'], 4);
+    actionTimer = setTimeout(() => { if (currentAction === 'joke') clearAction(); }, 8000);
+    speak(line, language === 'km', () => { giggleSound(); clearAction(); });
+  }
+}
+
+function detectAction(text) {
+  const t = text.toLowerCase();
+  if (/\bstop\b|ឈប់/.test(t)) return 'stop';
+  if (/\bsleep\b|គេង/.test(t)) return 'sleep';
+  if (/\brun\b|\brunning\b|រត់/.test(t)) return 'run';
+  if (/\bwalk\b|\bwalking\b|ដើរ/.test(t)) return 'walk';
+  if (/\bdance\b|\bdancing\b|រាំ/.test(t)) return 'dance';
+  if (/\bsing\b|\bsong\b|ច្រៀង|ចម្រៀង/.test(t)) return 'sing';
+  if (/\bjoke\b|\bfunny\b|make fun|កំប្លែង|សើច/.test(t)) return 'joke';
+  if (/light show|lights|light up|ពន្លឺ|បំភ្លឺ|ភ្លើង/.test(t)) return 'lights';
+  return null;
+}
+
+/* ---------- pat the head ---------- */
+$('atlasSvg').addEventListener('click', () => {
+  if (busy) return;
+  giggleSound();
+  setEyes('heart');
+  sparkle(['💕', '💖'], 4);
+  $('stage').classList.add('patted');
+  setTimeout(() => $('stage').classList.remove('patted'), 1000);
+  const line = language === 'km' ? 'ហ៊ីហ៊ី ខ្ញុំអៀនណា! អរគុណច្រើន!' : 'Hehe, that tickles! Thank you!';
+  addMsg('atlas', line, 'play');
+  speak(line, language === 'km', afterSpeech);
+});
+
+/* ---------- idle life: blinking & looking around ---------- */
+setInterval(() => {
+  if (busy || currentAction || state === 'listening' || state === 'thinking' || state === 'speaking') return;
+  if (state === 'idle') { // sleepy: occasional small sway
+    if (Math.random() < 0.3) { $('stage').classList.add('singing'); setTimeout(() => $('stage').classList.remove('singing'), 1300); }
+  } else { // awake: blink
+    setEyes('closed');
+    setTimeout(() => { if (!currentAction && STATES[state]) setEyes(STATES[state].eyes); }, 160);
+  }
+}, 4200);
+
 /* ---------- offline bilingual brain ---------- */
 const KM_DIGITS = '០១២៣៤៥៦៧៨៩';
 const normDigits = (t) => t.replace(/[០-៩]/g, (d) => String(KM_DIGITS.indexOf(d)));
@@ -265,7 +529,7 @@ function offlineBrain(message) {
               : `${a} ${opEn} ${b} equals ${pretty}! Great question!`;
   }
   if (/សួស្តី|ជំរាបសួរ|hello|\bhi\b|hey/.test(n))
-    return km ? 'សួស្តី! ខ្ញុំឈ្មោះ Atlas ជាមិត្តរបស់អ្នក! តើអ្នកចង់រៀនអ្វីថ្ងៃនេះ?' : "Hello! I'm Atlas, your friend! What would you like to learn today?";
+    return km ? 'សួស្តី! ខ្ញុំឈ្មោះ Atlas ជាមិត្តរបស់អ្នក! ចង់ឱ្យខ្ញុំរាំ ច្រៀង ឬនិទានកំប្លែងទេ?' : "Hello! I'm Atlas, your friend! Want me to dance, sing, or tell a joke?";
   if (/ឈ្មោះអ្វី|your name|who are you|អ្នកជានរណា/.test(n))
     return km ? 'ខ្ញុំឈ្មោះ Atlas! ខ្ញុំជាប្រដាប់ក្មេងលេងឆ្លាតវៃ ដែលចូលចិត្តរៀន និងលេងជាមួយអ្នក!' : "My name is Atlas! I'm a smart toy who loves learning and playing with you!";
   if (/សុខសប្បាយ|how are you/.test(n))
@@ -274,12 +538,12 @@ function offlineBrain(message) {
     return km ? 'មិនអីទេ! ខ្ញុំរីករាយដែលបានជួយ!' : "You're welcome! I'm happy to help!";
   if (/លាហើយ|លាសិនហើយ|goodbye|\bbye\b/.test(n))
     return km ? 'លាហើយ! ជួបគ្នាពេលក្រោយណា!' : 'Goodbye! See you next time!';
-  return km ? 'ឥឡូវនេះខ្ញុំនៅរបៀបក្រៅបណ្ដាញ។ សាកសួរខ្ញុំអំពីលេខ ដូចជា «៥ បូក ៣ ស្មើប៉ុន្មាន?» ឬគ្រាន់តែនិយាយសួស្តី!'
-            : 'I\'m in offline mode. Try a math question like "What is 5 plus 3?" or just say hello! (Add an OpenRouter key below for full conversation.)';
+  return km ? 'សាកប្រាប់ខ្ញុំ៖ «រាំ» «ច្រៀង» «កំប្លែង» «រត់» ឬសួរលេខ ដូចជា «៥ បូក ៣ ស្មើប៉ុន្មាន?»!'
+            : 'Try telling me: "dance", "sing", "tell me a joke", "run" — or ask me math like "What is 5 plus 3?" (Add a cloud key below for full conversation.)';
 }
 
 /* ---------- cloud brain (OpenRouter) ---------- */
-const SYSTEM_PROMPT = 'You are Atlas, a friendly smart tabletop companion toy made by DG Academy in Cambodia. You speak both Khmer and English fluently. Always reply in the SAME language the person used. Your replies are spoken aloud, so keep them SHORT (1-3 sentences), warm, and simple. No markdown, no emojis. Be a kind, patient, curious friend. Never claim to be human. For personal, medical, or emergency matters, gently suggest asking a trusted adult or professional.';
+const SYSTEM_PROMPT = 'You are Atlas, a friendly smart tabletop companion toy made by DG Academy in Cambodia. You speak both Khmer and English fluently. Always reply in the SAME language the person used. Your replies are spoken aloud, so keep them SHORT (1-3 sentences), warm, playful and simple. No markdown, no emojis. Be a kind, patient, curious friend. Never claim to be human. For personal, medical, or emergency matters, gently suggest asking a trusted adult or professional.';
 
 async function callCloud(messages, key) {
   const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -301,7 +565,7 @@ function speak(text, km, done) {
   if (!window.speechSynthesis) { if (done) done(); return; }
   const u = new SpeechSynthesisUtterance(text);
   const voices = speechSynthesis.getVoices();
-  const v = voices.find((x) => x.lang.toLowerCase().startsWith(km ? 'km' : 'en'));
+  const v = voices.find((xv) => xv.lang.toLowerCase().startsWith(km ? 'km' : 'en'));
   if (v) { u.voice = v; $('ttsNote').style.display = 'none'; }
   else if (km) {
     $('ttsNote').textContent = 'No Khmer text-to-speech voice in this browser, so Khmer replies are text-only. The real toy ships with its own Khmer voice.';
@@ -311,11 +575,12 @@ function speak(text, km, done) {
   u.rate = 0.95; u.pitch = 1.15;
   u.onend = () => { if (done) done(); };
   u.onerror = () => { if (done) done(); };
-  setState('speaking');
+  if (!currentAction) setState('speaking');
   speechSynthesis.speak(u);
 }
 
 function afterSpeech() {
+  if (currentAction) return; // an action is animating; it manages its own ending
   if (observing) { setState('observing'); resumeAmbientRec(); }
   else setState('idle');
 }
@@ -324,6 +589,15 @@ function afterSpeech() {
 async function ask(text) {
   const message = text.trim();
   if (!message || busy) return;
+
+  // playful commands are handled by the body, not the brains
+  const action = detectAction(message);
+  if (action) {
+    addMsg('child', message);
+    performAction(action);
+    return;
+  }
+
   busy = true;
   $('input').value = '';
   addMsg('child', message);
@@ -397,7 +671,7 @@ async function advise() {
   let answer;
   if (key) {
     try {
-      await lookNow(true); // grab one fresh observation first
+      await lookNow(true);
       const langName = language === 'km' ? 'Khmer' : 'English';
       answer = await callCloud([
         { role: 'system', content: SYSTEM_PROMPT + ' You are in ADVISOR mode: you have been quietly observing the room. Based on the observation log (what you heard people say and what you saw), give practical, helpful, encouraging advice: what the person should do next, what to be careful about, or a helpful suggestion for the situation. Reply in ' + langName + ', 2-4 short spoken sentences.' },
@@ -432,7 +706,6 @@ function startAmbientRec() {
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const heard = (e.results[i][0]?.transcript || '').trim();
       if (!heard) continue;
-      // addressed directly? answer; otherwise just remember
       if (/atlas|អាត់ឡាស|អាតឡាស/i.test(heard)) {
         remember('heard', heard);
         pauseAmbientRec();
@@ -444,7 +717,6 @@ function startAmbientRec() {
   };
   ambientRec.onerror = (e) => { if (e.error === 'not-allowed') toggleObserve(false); };
   ambientRec.onend = () => {
-    // Chrome stops the stream periodically — restart while observing
     if (observing && !ambientPaused) setTimeout(() => { try { ambientRec.start(); } catch (_) {} }, 300);
   };
   try { ambientRec.start(); } catch (_) {}
@@ -465,6 +737,7 @@ async function toggleObserve(on) {
   $('observeBtn').classList.toggle('on', on);
   $('obsBadge').style.display = on ? '' : 'none';
   if (on) {
+    clearAction(true);
     addMsg('ambient', '— observing started (' + now() + ') — I listen to everyone, watch the room, answer when you say “Atlas”, and advise when you tap 💡 —');
     setState('observing');
     await startCamera();
@@ -484,13 +757,15 @@ async function toggleObserve(on) {
 $('observeBtn').addEventListener('click', () => toggleObserve(!observing));
 $('lookBtn').addEventListener('click', () => lookNow(false));
 $('adviseBtn').addEventListener('click', () => advise());
+document.querySelectorAll('.playRow button').forEach((b) =>
+  b.addEventListener('click', () => performAction(b.dataset.act)));
 
 /* ---------- push-to-talk ---------- */
 let talkRec = null;
 if (!Rec) {
   $('micBtn').disabled = true;
   $('observeBtn').disabled = true;
-  $('micNote').textContent = 'This browser has no speech recognition — use the text box (Chrome or Edge recommended for voice).';
+  $('micNote').textContent = 'This browser has no speech recognition — use the text box and game buttons (Chrome or Edge recommended for voice).';
 } else {
   $('micNote').textContent = 'Mic language: en-US';
 }
@@ -499,6 +774,7 @@ $('micBtn').addEventListener('click', () => {
   if (state === 'listening') { talkRec && talkRec.stop(); setState('idle'); return; }
   if (!Rec || observing) return;
   speechSynthesis && speechSynthesis.cancel();
+  clearAction(true);
   talkRec = new Rec();
   talkRec.lang = language === 'km' ? 'km-KH' : 'en-US';
   talkRec.interimResults = false;
@@ -516,7 +792,7 @@ function setLang(l) {
   $('langKm').classList.toggle('active', l === 'km');
   if (Rec) $('micNote').textContent = 'Mic language: ' + (l === 'km' ? 'km-KH' : 'en-US');
   $('input').placeholder = l === 'km' ? 'សរសេរសារជាភាសាខ្មែរ ឬអង់គ្លេស...' : 'Type to Atlas in English or Khmer...';
-  if (observing) { // restart ambient recognition in the new language
+  if (observing) {
     pauseAmbientRec();
     startAmbientRec();
     ambientPaused = false;
@@ -534,6 +810,7 @@ $('form').addEventListener('submit', (e) => { e.preventDefault(); ask($('input')
 $('apiKey').value = localStorage.getItem('atlas_key') || '';
 $('apiKey').addEventListener('change', () => localStorage.setItem('atlas_key', $('apiKey').value.trim()));
 
+applyX();
 setState('idle');
 </script>
 </body>
