@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas — Smart Toy Live Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, "Khmer OS", "Noto Sans Khmer", sans-serif;
+    background: radial-gradient(circle at 38% 30%, #1d2b4f, #0c1226);
+    color: #fff; min-height: 100vh; padding: 32px 16px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { text-align: center; font-size: 2.2rem; letter-spacing: 0.04em; }
+  .sub { text-align: center; color: #9fb0d0; font-size: 0.9rem; margin-top: 6px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 28px; margin-top: 28px; }
+  @media (min-width: 820px) { .grid { grid-template-columns: 360px 1fr; } }
+  .figure { display: flex; flex-direction: column; align-items: center; }
+  .statelabel { margin-top: 8px; font-size: 0.85rem; color: #cbd5e1; min-height: 1.2em; }
+  .langs { margin-top: 12px; display: flex; gap: 8px; }
+  .langs button {
+    padding: 6px 16px; border-radius: 999px; border: 1px solid #475569;
+    background: transparent; color: #cbd5e1; cursor: pointer; font-size: 0.85rem;
+  }
+  .langs button.active { background: #0284c7; border-color: #0284c7; color: #fff; }
+  #micBtn {
+    margin-top: 16px; width: 64px; height: 64px; border-radius: 50%;
+    border: none; background: #0284c7; color: #fff; cursor: pointer;
+    font-size: 1.5rem; transition: background 0.2s;
+  }
+  #micBtn.listening { background: #dc2626; animation: pulse 1.2s infinite; }
+  #micBtn:disabled { background: #334155; cursor: not-allowed; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.5);} 50% { box-shadow: 0 0 0 14px rgba(220,38,38,0);} }
+  .micnote { margin-top: 10px; font-size: 0.72rem; color: #64748b; text-align: center; max-width: 280px; }
+  .panel {
+    border: 1px solid #334155; border-radius: 14px; background: rgba(15,23,42,0.6);
+    display: flex; flex-direction: column; min-height: 460px;
+  }
+  .panel header { padding: 12px 16px; border-bottom: 1px solid #334155; font-size: 0.85rem; color: #cbd5e1; }
+  #log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 8px 12px; border-radius: 10px; font-size: 0.92rem; line-height: 1.5; }
+  .msg.child { align-self: flex-end; background: #0284c7; }
+  .msg.atlas { align-self: flex-start; background: #1e293b; }
+  .msg .badge {
+    margin-left: 8px; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.06em;
+    background: #334155; border-radius: 4px; padding: 2px 5px; color: #94a3b8; vertical-align: middle;
+  }
+  .hint { color: #64748b; font-size: 0.85rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 10px; }
+  .chips button {
+    border: 1px solid #475569; background: transparent; color: #cbd5e1;
+    border-radius: 999px; padding: 4px 12px; font-size: 0.75rem; cursor: pointer;
+  }
+  .chips button:hover { border-color: #38bdf8; color: #fff; }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid #334155; }
+  form input {
+    flex: 1; background: #1e293b; border: 1px solid #475569; border-radius: 8px;
+    color: #fff; padding: 10px 12px; font-size: 0.92rem; font-family: inherit;
+  }
+  form button {
+    background: #0284c7; border: none; border-radius: 8px; color: #fff;
+    padding: 0 18px; cursor: pointer; font-size: 1rem;
+  }
+  details { margin-top: 18px; color: #94a3b8; font-size: 0.8rem; }
+  details input { width: 100%; margin-top: 8px; background: #1e293b; border: 1px solid #475569; border-radius: 8px; color: #fff; padding: 8px 10px; }
+  .note { color: #fbbf24; font-size: 0.75rem; padding: 0 16px 8px; }
+  footer { margin-top: 28px; text-align: center; color: #475569; font-size: 0.75rem; }
+  footer a { color: #64748b; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ATLAS</h1>
+  <p class="sub">Smart tabletop toy — live brain demo · English + ខ្មែរ · DG Academy</p>
+
+  <div class="grid">
+    <div class="figure">
+      <svg id="atlasSvg" viewBox="0 0 360 460" width="300" aria-label="Atlas">
+        <defs>
+          <radialGradient id="g1" cx="40%" cy="35%" r="75%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+            <stop offset="45%" stop-color="#3aa0ff" id="globeStopA"/>
+            <stop offset="100%" stop-color="#3aa0ff" stop-opacity="0.7" id="globeStopB"/>
+          </radialGradient>
+          <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#f2efe9"/><stop offset="100%" stop-color="#d8d3c8"/>
+          </linearGradient>
+        </defs>
+        <circle id="halo" cx="180" cy="105" r="92" fill="rgba(58,160,255,0.3)"/>
+        <path d="M 108 268 C 88 230 92 202 116 182" fill="none" stroke="#d8d3c8" stroke-width="24" stroke-linecap="round"/>
+        <path d="M 252 268 C 272 230 268 202 244 182" fill="none" stroke="#e8e4dc" stroke-width="24" stroke-linecap="round"/>
+        <circle cx="180" cy="105" r="62" fill="url(#g1)"/>
+        <ellipse cx="180" cy="105" rx="62" ry="24" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="1.5"/>
+        <ellipse cx="180" cy="105" rx="24" ry="62" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="1.5"/>
+        <ellipse cx="160" cy="82" rx="16" ry="9" fill="#fff" opacity="0.55"/>
+        <ellipse cx="180" cy="172" rx="36" ry="10" fill="#1d2330"/>
+        <g id="collar" fill="#3aa0ff">
+          <circle cx="148" cy="172" r="3"/><circle cx="162" cy="175" r="3"/><circle cx="180" cy="176" r="3"/>
+          <circle cx="198" cy="175" r="3"/><circle cx="212" cy="172" r="3"/>
+        </g>
+        <path d="M 100 440 L 100 270 C 100 208 132 180 180 180 C 228 180 260 208 260 270 L 260 440 Z" fill="url(#g2)"/>
+        <rect x="122" y="212" width="116" height="68" rx="34" fill="#2b313d"/>
+        <g id="eyesOpen" style="display:none" fill="#5fe3ff">
+          <circle cx="155" cy="244" r="11"/><circle cx="205" cy="244" r="11"/>
+          <circle cx="151" cy="240" r="4" fill="#fff"/><circle cx="201" cy="240" r="4" fill="#fff"/>
+        </g>
+        <g id="eyesClosed" stroke="#5fe3ff" stroke-width="4" stroke-linecap="round" fill="none">
+          <path d="M 144 246 q 10 8 22 0"/><path d="M 194 246 q 10 8 22 0"/>
+        </g>
+        <ellipse cx="132" cy="262" rx="7" ry="4" fill="#ff9d8a" opacity="0.5"/>
+        <ellipse cx="228" cy="262" rx="7" ry="4" fill="#ff9d8a" opacity="0.5"/>
+        <g fill="#9a948a"><circle cx="160" cy="298" r="2.5"/><circle cx="173" cy="298" r="2.5"/><circle cx="187" cy="298" r="2.5"/><circle cx="200" cy="298" r="2.5"/></g>
+        <g fill="#b5afa3">
+          <circle cx="157" cy="330" r="3"/><circle cx="173" cy="330" r="3"/><circle cx="189" cy="330" r="3"/><circle cx="205" cy="330" r="3"/>
+          <circle cx="165" cy="344" r="3"/><circle cx="181" cy="344" r="3"/><circle cx="197" cy="344" r="3"/>
+          <circle cx="157" cy="358" r="3"/><circle cx="173" cy="358" r="3"/><circle cx="189" cy="358" r="3"/><circle cx="205" cy="358" r="3"/>
+        </g>
+        <path d="M 92 440 L 268 440 L 260 414 C 230 404 130 404 100 414 Z" fill="#3a4150"/>
+        <rect x="90" y="434" width="180" height="8" rx="4" fill="#1d222d"/>
+      </svg>
+      <p class="statelabel" id="stateLabel">Sleeping — tap the mic or type to wake me</p>
+      <div class="langs">
+        <button id="langEn" class="active">English</button>
+        <button id="langKm">ខ្មែរ (Khmer)</button>
+      </div>
+      <button id="micBtn" title="Talk to Atlas">🎤</button>
+      <p class="micnote" id="micNote"></p>
+    </div>
+
+    <div class="panel">
+      <header>🔊 Conversation</header>
+      <div id="log"><p class="hint">Say or type something — try a quick phrase below. Atlas answers in the language you use.</p></div>
+      <p class="note" id="ttsNote" style="display:none"></p>
+      <div class="chips">
+        <button data-lang="en" data-text="Hello Atlas!">“Hello Atlas!”</button>
+        <button data-lang="en" data-text="What is 7 plus 5?">“What is 7 plus 5?”</button>
+        <button data-lang="km" data-text="សួស្តី Atlas!">“សួស្តី Atlas!”</button>
+        <button data-lang="km" data-text="៥ បូក ៣ ស្មើប៉ុន្មាន?">“៥ បូក ៣ ស្មើប៉ុន្មាន?”</button>
+      </div>
+      <form id="form">
+        <input id="input" autocomplete="off" placeholder="Type to Atlas in English or Khmer...">
+        <button type="submit">➤</button>
+      </form>
+    </div>
+  </div>
+
+  <details>
+    <summary>⚙️ Optional: connect the full cloud AI brain (OpenRouter API key)</summary>
+    <p style="margin-top:8px">Without a key, Atlas uses its built-in offline brain (greetings + math games, both languages).
+    Paste a free key from openrouter.ai to chat about anything. The key is stored only in this browser.</p>
+    <input id="apiKey" type="password" placeholder="sk-or-...">
+  </details>
+
+  <footer>Concept demo of the Atlas smart tabletop toy · see <a href="docs/atlas-toy-design.md">docs/atlas-toy-design.md</a> ·
+  voice works in Chrome/Edge over HTTPS or localhost</footer>
+</div>
+
+<script>
+const STATES = {
+  idle:      { color: '#3aa0ff', glow: 'rgba(58,160,255,0.30)', label: 'Sleeping — tap the mic or type to wake me', eyes: false },
+  listening: { color: '#43e6ff', glow: 'rgba(67,230,255,0.50)', label: 'Listening…', eyes: true },
+  thinking:  { color: '#ffb648', glow: 'rgba(255,182,72,0.45)', label: 'Thinking…', eyes: true },
+  speaking:  { color: '#4ade80', glow: 'rgba(74,222,128,0.45)', label: 'Speaking', eyes: true },
+};
+let state = 'idle';
+let language = 'en';
+
+const $ = (id) => document.getElementById(id);
+
+function setState(next) {
+  state = next;
+  const s = STATES[next];
+  $('globeStopA').setAttribute('stop-color', s.color);
+  $('globeStopB').setAttribute('stop-color', s.color);
+  $('halo').setAttribute('fill', s.glow);
+  $('collar').setAttribute('fill', s.color);
+  $('eyesOpen').style.display = s.eyes ? '' : 'none';
+  $('eyesClosed').style.display = s.eyes ? 'none' : '';
+  $('stateLabel').textContent = s.label;
+  $('micBtn').classList.toggle('listening', next === 'listening');
+  $('micBtn').disabled = (next === 'thinking' || next === 'speaking') ? true : false;
+}
+
+function addMsg(role, text, badge) {
+  const hint = document.querySelector('#log .hint');
+  if (hint) hint.remove();
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.textContent = text;
+  if (badge) {
+    const b = document.createElement('span');
+    b.className = 'badge';
+    b.textContent = badge;
+    div.appendChild(b);
+  }
+  $('log').appendChild(div);
+  $('log').scrollTop = $('log').scrollHeight;
+}
+
+/* ---------- offline bilingual brain ---------- */
+const KM_DIGITS = '០១២៣៤៥៦៧៨៩';
+const normDigits = (t) => t.replace(/[០-៩]/g, (d) => String(KM_DIGITS.indexOf(d)));
+const toKm = (n) => String(n).replace(/[0-9]/g, (d) => KM_DIGITS[+d]);
+const hasKhmer = (t) => /[ក-៿]/.test(t);
+
+function offlineBrain(message) {
+  const km = hasKhmer(message);
+  const n = normDigits(message).toLowerCase();
+  const mathText = n
+    .replace(/បូក|plus/g, '+').replace(/ដក|minus/g, '-')
+    .replace(/គុណ(?:នឹង)?|times|multiplied by/g, '*').replace(/ចែក(?:នឹង)?|divided by/g, '/');
+  const m = mathText.match(/(-?\d+)\s*([+\-*\/])\s*(-?\d+)/);
+  if (m) {
+    const a = +m[1], b = +m[3], op = m[2];
+    if (op === '/' && b === 0) return km ? 'យើងមិនអាចចែកនឹងសូន្យបានទេ! សាកលេខផ្សេងទៀតមើល!' : "We can't divide by zero! Try another number!";
+    const r = op === '+' ? a + b : op === '-' ? a - b : op === '*' ? a * b : a / b;
+    const pretty = Number.isInteger(r) ? String(r) : r.toFixed(2);
+    const opKm = { '+': 'បូក', '-': 'ដក', '*': 'គុណ', '/': 'ចែក' }[op];
+    const opEn = { '+': 'plus', '-': 'minus', '*': 'times', '/': 'divided by' }[op];
+    return km ? `${toKm(a)} ${opKm} ${toKm(b)} ស្មើ ${toKm(pretty)}! ពូកែណាស់ដែលសួរ!`
+              : `${a} ${opEn} ${b} equals ${pretty}! Great question!`;
+  }
+  if (/សួស្តី|ជំរាបសួរ|hello|\bhi\b|hey/.test(n))
+    return km ? 'សួស្តី! ខ្ញុំឈ្មោះ Atlas ជាមិត្តរបស់អ្នក! តើអ្នកចង់រៀនអ្វីថ្ងៃនេះ?' : "Hello! I'm Atlas, your friend! What would you like to learn today?";
+  if (/ឈ្មោះអ្វី|your name|who are you|អ្នកជានរណា/.test(n))
+    return km ? 'ខ្ញុំឈ្មោះ Atlas! ខ្ញុំជាប្រដាប់ក្មេងលេងឆ្លាតវៃ ដែលចូលចិត្តរៀន និងលេងជាមួយអ្នក!' : "My name is Atlas! I'm a smart toy who loves learning and playing with you!";
+  if (/សុខសប្បាយ|how are you/.test(n))
+    return km ? 'ខ្ញុំសុខសប្បាយទេ អរគុណ! ចុះអ្នកវិញ?' : "I'm great, thank you! How about you?";
+  if (/អរគុណ|thank/.test(n))
+    return km ? 'មិនអីទេ! ខ្ញុំរីករាយដែលបានជួយ!' : "You're welcome! I'm happy to help!";
+  if (/លាហើយ|លាសិនហើយ|goodbye|\bbye\b/.test(n))
+    return km ? 'លាហើយ! ជួបគ្នាពេលក្រោយណា!' : 'Goodbye! See you next time!';
+  return km ? 'ឥឡូវនេះខ្ញុំនៅរបៀបក្រៅបណ្ដាញ។ សាកសួរខ្ញុំអំពីលេខ ដូចជា «៥ បូក ៣ ស្មើប៉ុន្មាន?» ឬគ្រាន់តែនិយាយសួស្តី!'
+            : 'I\'m in offline mode. Try a math question like "What is 5 plus 3?" or just say hello! (Add an OpenRouter key below for full conversation.)';
+}
+
+/* ---------- cloud brain (optional, via OpenRouter) ---------- */
+const SYSTEM_PROMPT = 'You are Atlas, a friendly smart tabletop companion toy for children ages 5-12, made by DG Academy in Cambodia. You speak both Khmer and English fluently. Always reply in the SAME language the child used. Your replies are spoken aloud, so keep them SHORT (1-3 sentences), warm, and simple. No markdown, no emojis. Be a kind, patient, curious friend who encourages learning. Never claim to be human. For personal, medical, or emergency matters, gently tell the child to ask a trusted adult. Refuse and gently redirect any inappropriate topic to something fun and educational.';
+
+async function cloudBrain(message, key) {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+    body: JSON.stringify({
+      model: 'openai/gpt-5.5',
+      messages: [{ role: 'system', content: SYSTEM_PROMPT }, { role: 'user', content: message }],
+    }),
+  });
+  if (!res.ok) throw new Error('OpenRouter error ' + res.status);
+  const data = await res.json();
+  return (data.choices?.[0]?.message?.content || '').trim();
+}
+
+/* ---------- speech out ---------- */
+function speak(text, km) {
+  if (!window.speechSynthesis) { setState('idle'); return; }
+  const u = new SpeechSynthesisUtterance(text);
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find((x) => x.lang.toLowerCase().startsWith(km ? 'km' : 'en'));
+  if (v) { u.voice = v; $('ttsNote').style.display = 'none'; }
+  else if (km) {
+    $('ttsNote').textContent = 'No Khmer text-to-speech voice in this browser, so Khmer replies are text-only. The real toy ships with its own Khmer voice.';
+    $('ttsNote').style.display = '';
+  }
+  u.lang = km ? 'km-KH' : 'en-US';
+  u.rate = 0.95; u.pitch = 1.15;
+  u.onend = () => setState('idle');
+  u.onerror = () => setState('idle');
+  setState('speaking');
+  speechSynthesis.speak(u);
+}
+
+/* ---------- ask ---------- */
+async function ask(text) {
+  const message = text.trim();
+  if (!message || state === 'thinking') return;
+  $('input').value = '';
+  addMsg('child', message);
+  setState('thinking');
+  const key = $('apiKey').value.trim();
+  let answer, badge;
+  try {
+    if (key) { answer = await cloudBrain(message, key); badge = 'cloud'; }
+  } catch (e) { console.warn(e); }
+  if (!answer) { answer = offlineBrain(message); badge = key ? 'offline (cloud failed)' : 'offline'; }
+  addMsg('atlas', answer, badge);
+  speak(answer, hasKhmer(answer));
+}
+
+/* ---------- speech in ---------- */
+const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null;
+if (!Rec) {
+  $('micBtn').disabled = true;
+  $('micNote').textContent = 'This browser has no speech recognition — use the text box (Chrome or Edge recommended for voice).';
+} else {
+  $('micNote').textContent = 'Mic language: en-US';
+}
+
+$('micBtn').addEventListener('click', () => {
+  if (state === 'listening') { rec && rec.stop(); setState('idle'); return; }
+  if (!Rec) return;
+  speechSynthesis && speechSynthesis.cancel();
+  rec = new Rec();
+  rec.lang = language === 'km' ? 'km-KH' : 'en-US';
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  rec.onresult = (e) => { const heard = e.results[0]?.[0]?.transcript; if (heard) ask(heard); };
+  rec.onerror = () => setState('idle');
+  rec.onend = () => { if (state === 'listening') setState('idle'); };
+  setState('listening');
+  rec.start();
+});
+
+function setLang(l) {
+  language = l;
+  $('langEn').classList.toggle('active', l === 'en');
+  $('langKm').classList.toggle('active', l === 'km');
+  if (Rec) $('micNote').textContent = 'Mic language: ' + (l === 'km' ? 'km-KH' : 'en-US');
+  $('input').placeholder = l === 'km' ? 'សរសេរសារជាភាសាខ្មែរ ឬអង់គ្លេស...' : 'Type to Atlas in English or Khmer...';
+}
+$('langEn').addEventListener('click', () => setLang('en'));
+$('langKm').addEventListener('click', () => setLang('km'));
+
+document.querySelectorAll('.chips button').forEach((b) =>
+  b.addEventListener('click', () => { setLang(b.dataset.lang); ask(b.dataset.text); }));
+
+$('form').addEventListener('submit', (e) => { e.preventDefault(); ask($('input').value); });
+
+/* persist API key in this browser only */
+$('apiKey').value = localStorage.getItem('atlas_key') || '';
+$('apiKey').addEventListener('change', () => localStorage.setItem('atlas_key', $('apiKey').value.trim()));
+
+setState('idle');
+</script>
+</body>
+</html>

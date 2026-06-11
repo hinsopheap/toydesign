@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1280" height="920" viewBox="0 0 1280 920" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGlow" cx="38%" cy="42%" r="70%">
+      <stop offset="0%" stop-color="#1d2b4f"/>
+      <stop offset="100%" stop-color="#0c1226"/>
+    </radialGradient>
+    <radialGradient id="globeGrad" cx="40%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#c9f6ff"/>
+      <stop offset="45%" stop-color="#5fd9f2"/>
+      <stop offset="100%" stop-color="#1899c4"/>
+    </radialGradient>
+    <radialGradient id="globeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7ee8ff" stop-opacity="0.55"/>
+      <stop offset="70%" stop-color="#7ee8ff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#7ee8ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#f2efe9"/>
+      <stop offset="100%" stop-color="#d8d3c8"/>
+    </linearGradient>
+    <linearGradient id="faceGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3a4150"/>
+      <stop offset="100%" stop-color="#232833"/>
+    </linearGradient>
+    <linearGradient id="baseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4c5566"/>
+      <stop offset="100%" stop-color="#2e3442"/>
+    </linearGradient>
+    <linearGradient id="tableGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8a6948"/>
+      <stop offset="100%" stop-color="#5e4630"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1280" height="920" fill="url(#bgGlow)"/>
+  <text x="64" y="78" font-family="Helvetica, Arial, sans-serif" font-size="40" font-weight="bold" fill="#ffffff">ATLAS</text>
+  <text x="64" y="110" font-family="Helvetica, Arial, sans-serif" font-size="19" fill="#9fb0d0">Smart tabletop companion toy — concept prototype v0.1</text>
+  <text x="64" y="136" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#67769a">DG Academy · ages 5–12 · Khmer + English · no screen, no camera</text>
+
+  <!-- table -->
+  <rect x="0" y="800" width="1280" height="120" fill="url(#tableGrad)"/>
+  <rect x="0" y="800" width="1280" height="8" fill="#a8herr" opacity="0"/>
+  <rect x="0" y="800" width="1280" height="6" fill="#a98softa" opacity="0"/>
+  <line x1="0" y1="800" x2="1280" y2="800" stroke="#b08a5e" stroke-width="4"/>
+
+  <!-- ===================== ATLAS, front view ===================== -->
+  <g id="atlas">
+    <!-- soft shadow on table -->
+    <ellipse cx="430" cy="802" rx="190" ry="22" fill="#000000" opacity="0.38"/>
+
+    <!-- globe glow halo -->
+    <circle cx="430" cy="300" r="170" fill="url(#globeGlow)"/>
+
+    <!-- arms holding the globe -->
+    <path d="M 318 470 C 290 420 296 380 330 352" fill="none" stroke="#d8d3c8" stroke-width="34" stroke-linecap="round"/>
+    <path d="M 542 470 C 570 420 564 380 530 352" fill="none" stroke="#e8e4dc" stroke-width="34" stroke-linecap="round"/>
+    <circle cx="330" cy="350" r="22" fill="#cfc9bc"/>
+    <circle cx="530" cy="350" r="22" fill="#efece5"/>
+
+    <!-- globe (translucent LED dome) -->
+    <circle cx="430" cy="300" r="105" fill="url(#globeGrad)" opacity="0.92"/>
+    <!-- meridians / parallels -->
+    <ellipse cx="430" cy="300" rx="105" ry="40" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="2"/>
+    <ellipse cx="430" cy="300" rx="40" ry="105" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="2"/>
+    <ellipse cx="430" cy="300" rx="78" ry="103" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.5"/>
+    <ellipse cx="430" cy="300" rx="103" ry="78" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.5"/>
+    <!-- little landmasses -->
+    <path d="M 390 265 q 18 -14 36 -4 q 14 8 4 20 q -16 14 -34 6 q -14 -10 -6 -22 Z" fill="#2fbf8f" opacity="0.85"/>
+    <path d="M 455 320 q 16 -8 26 4 q 8 12 -4 18 q -16 8 -26 -2 q -6 -12 4 -20 Z" fill="#2fbf8f" opacity="0.85"/>
+    <!-- specular highlight -->
+    <ellipse cx="395" cy="258" rx="30" ry="18" fill="#ffffff" opacity="0.55" transform="rotate(-25 395 258)"/>
+
+    <!-- LED ring collar under globe -->
+    <ellipse cx="430" cy="408" rx="58" ry="16" fill="#1d2330"/>
+    <g fill="#43e6ff">
+      <circle cx="378" cy="408" r="5"/><circle cx="396" cy="415" r="5"/><circle cx="418" cy="419" r="5"/>
+      <circle cx="442" cy="419" r="5"/><circle cx="464" cy="415" r="5"/><circle cx="482" cy="408" r="5"/>
+      <circle cx="396" cy="401" r="5" opacity="0.6"/><circle cx="430" cy="397" r="5" opacity="0.6"/><circle cx="464" cy="401" r="5" opacity="0.6"/>
+    </g>
+
+    <!-- body -->
+    <path d="M 300 800
+             L 300 560
+             C 300 460 350 418 430 418
+             C 510 418 560 460 560 560
+             L 560 800 Z" fill="url(#bodyGrad)"/>
+    <!-- head touch pad -->
+    <ellipse cx="430" cy="428" rx="52" ry="12" fill="#cfc9bc"/>
+    <text x="430" y="412" font-family="Helvetica, Arial, sans-serif" font-size="0" fill="#888">.</text>
+
+    <!-- smoked face panel -->
+    <rect x="338" y="470" width="184" height="110" rx="55" fill="url(#faceGrad)"/>
+    <!-- LED matrix eyes (happy) -->
+    <g fill="#5fe3ff">
+      <!-- left eye: 8x8 matrix arc -->
+      <g>
+        <circle cx="380" cy="520" r="4"/><circle cx="392" cy="512" r="4"/><circle cx="404" cy="508" r="4"/>
+        <circle cx="416" cy="512" r="4"/><circle cx="428" cy="520" r="4"/>
+        <circle cx="392" cy="524" r="4" opacity="0.45"/><circle cx="404" cy="522" r="4" opacity="0.45"/><circle cx="416" cy="524" r="4" opacity="0.45"/>
+      </g>
+      <!-- right eye -->
+      <g>
+        <circle cx="432" cy="520" r="0"/>
+        <circle cx="452" cy="520" r="4"/><circle cx="464" cy="512" r="4"/><circle cx="476" cy="508" r="4"/>
+        <circle cx="488" cy="512" r="4"/><circle cx="500" cy="520" r="4"/>
+        <circle cx="464" cy="524" r="4" opacity="0.45"/><circle cx="476" cy="522" r="4" opacity="0.45"/><circle cx="488" cy="524" r="4" opacity="0.45"/>
+      </g>
+    </g>
+    <!-- blush -->
+    <ellipse cx="356" cy="548" rx="10" ry="6" fill="#ff9d8a" opacity="0.5"/>
+    <ellipse cx="504" cy="548" rx="10" ry="6" fill="#ff9d8a" opacity="0.5"/>
+
+    <!-- mic array holes -->
+    <g fill="#9a948a">
+      <circle cx="402" cy="606" r="3"/><circle cx="420" cy="602" r="3"/><circle cx="440" cy="602" r="3"/><circle cx="458" cy="606" r="3"/>
+    </g>
+
+    <!-- speaker grille -->
+    <g fill="#b5afa3">
+      <circle cx="406" cy="668" r="4"/><circle cx="424" cy="668" r="4"/><circle cx="442" cy="668" r="4"/><circle cx="460" cy="668" r="4"/>
+      <circle cx="397" cy="686" r="4"/><circle cx="415" cy="686" r="4"/><circle cx="433" cy="686" r="4"/><circle cx="451" cy="686" r="4"/><circle cx="469" cy="686" r="4"/>
+      <circle cx="406" cy="704" r="4"/><circle cx="424" cy="704" r="4"/><circle cx="442" cy="704" r="4"/><circle cx="460" cy="704" r="4"/>
+      <circle cx="415" cy="722" r="4"/><circle cx="433" cy="722" r="4"/><circle cx="451" cy="722" r="4"/>
+    </g>
+
+    <!-- physical mute slider (left side) -->
+    <rect x="306" y="630" width="14" height="56" rx="7" fill="#3a4150"/>
+    <rect x="308" y="634" width="10" height="22" rx="5" fill="#ff5a52"/>
+
+    <!-- weighted base with rubber ring -->
+    <path d="M 290 800 L 570 800 L 560 764 C 520 752 340 752 300 764 Z" fill="url(#baseGrad)"/>
+    <rect x="288" y="792" width="284" height="10" rx="5" fill="#1d222d"/>
+    <!-- USB-C port -->
+    <rect x="416" y="774" width="28" height="9" rx="4.5" fill="#11151d"/>
+  </g>
+
+  <!-- ===================== callouts ===================== -->
+  <g font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#dfe7f7">
+    <g stroke="#5a6e9e" stroke-width="1.5" fill="none">
+      <path d="M 540 250 L 660 210"/>
+      <path d="M 500 408 L 660 388"/>
+      <path d="M 528 520 L 660 488"/>
+      <path d="M 462 604 L 660 560 "/>
+      <path d="M 470 690 L 660 660"/>
+      <path d="M 313 658 L 240 640"/>
+      <path d="M 556 778 L 660 760"/>
+      <path d="M 322 396 L 240 360"/>
+    </g>
+    <g>
+      <text x="668" y="206">Translucent LED globe — “mood light” shows state:</text>
+      <text x="668" y="228" fill="#9fb0d0" font-size="14">listening, thinking, speaking, sleeping, celebration</text>
+
+      <text x="668" y="384">LED ring collar + capacitive touch pad (pat to wake / praise)</text>
+
+      <text x="668" y="484">2× 8×8 LED-matrix eyes behind smoked panel</text>
+      <text x="668" y="506" fill="#9fb0d0" font-size="14">blink, look around, happy / curious / sleepy expressions</text>
+
+      <text x="668" y="556">4× far-field MEMS microphone array</text>
+
+      <text x="668" y="656">3 W speaker — warm, child-safe voice (Khmer + English)</text>
+
+      <text x="668" y="756">Weighted base, rubber anti-slip ring, USB-C charging</text>
+      <text x="668" y="778" fill="#9fb0d0" font-size="14">3.7 V 2500 mAh battery · 8+ hrs cordless</text>
+    </g>
+    <g text-anchor="end">
+      <text x="232" y="356">Head-tilt servo</text>
+      <text x="232" y="376" fill="#9fb0d0" font-size="14">turns toward the speaker</text>
+      <text x="232" y="636">Physical mic mute</text>
+      <text x="232" y="656" fill="#9fb0d0" font-size="14">hardware cutoff slider</text>
+    </g>
+  </g>
+
+  <!-- ===================== globe state strip ===================== -->
+  <g font-family="Helvetica, Arial, sans-serif">
+    <text x="668" y="830" font-size="15" fill="#9fb0d0">GLOBE LIGHT LANGUAGE</text>
+    <g>
+      <circle cx="690" cy="868" r="16" fill="#3aa0ff"/><text x="690" y="902" font-size="12" fill="#dfe7f7" text-anchor="middle">Sleep</text>
+      <circle cx="770" cy="868" r="16" fill="#43e6ff"/><text x="770" y="902" font-size="12" fill="#dfe7f7" text-anchor="middle">Listening</text>
+      <circle cx="850" cy="868" r="16" fill="#ffb648"/><text x="850" y="902" font-size="12" fill="#dfe7f7" text-anchor="middle">Thinking</text>
+      <circle cx="930" cy="868" r="16" fill="#4ade80"/><text x="930" y="902" font-size="12" fill="#dfe7f7" text-anchor="middle">Speaking</text>
+      <circle cx="1010" cy="868" r="16" fill="#ff5a52"/><text x="1010" y="902" font-size="12" fill="#dfe7f7" text-anchor="middle">Muted</text>
+      <circle cx="1090" cy="868" r="16" fill="#c084fc"/><text x="1090" y="902" font-size="12" fill="#dfe7f7" text-anchor="middle">Celebrate</text>
+    </g>
+  </g>
+
+  <!-- scale note -->
+  <g font-family="Helvetica, Arial, sans-serif" font-size="14" fill="#67769a">
+    <line x1="600" y1="195" x2="600" y2="800" stroke="#67769a" stroke-width="1" stroke-dasharray="4 5"/>
+    <text x="612" y="170" fill="#9fb0d0">~14 cm tall</text>
+    <line x1="585" y1="195" x2="615" y2="195" stroke="#67769a" stroke-width="1"/>
+  </g>
+</svg>
