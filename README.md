@@ -30,6 +30,19 @@ The demo is a single HTML file with no build step and no server.
 **Option B — run locally:** download `index.html` and double-click it.
 (Voice input needs Chrome/Edge; everything else works in any browser.)
 
+### Two modes
+
+- **💬 Talk** — push-to-talk conversation: tap the mic, speak, Atlas answers
+  and speaks back.
+- **👁 Observe (Atlas Sense)** — Atlas becomes environment-aware: it listens
+  continuously to you *and people around you*, watches the room through the
+  camera (one glance every 30 seconds plus "Look now"), answers whenever
+  someone says its name ("Atlas, what time is dinner?"), and when you tap
+  **💡 Advise me** it combines everything it heard and saw into practical
+  advice for your situation. A red **OBSERVING** indicator is always shown
+  while the mic and camera are live, and stopping observe mode releases both
+  immediately.
+
 ### Two brains
 
 - **Offline brain (built in, works instantly):** greetings, introductions, and
@@ -38,7 +51,9 @@ The demo is a single HTML file with no build step and no server.
 - **Cloud brain (optional):** open the ⚙️ section at the bottom of the demo and
   paste an [OpenRouter](https://openrouter.ai) API key for full open-ended AI
   conversation with the child-safe Atlas persona. The key never leaves your
-  browser.
+  browser. **Vision and smart advice require the cloud brain** — without a
+  key, Observe mode still logs what it hears but cannot interpret the camera
+  or reason about your situation.
 
 ### Notes on speech
 
